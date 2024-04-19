@@ -63,7 +63,7 @@ def run_training_loop(params):
 
     # Make the gym environment
     env = gym.make(params['env_name'], render_mode=None)
-    env.reset(seed=seed)
+    ob=env.reset(seed=seed)
 
     # Maximum length for episodes
     params['ep_len'] = params['ep_len'] or env.spec.max_episode_steps
@@ -132,7 +132,7 @@ def run_training_loop(params):
             # TODO: collect `params['batch_size']` transitions
             # HINT: use utils.sample_trajectories
             # TODO: implement missing parts of utils.sample_trajectory
-            paths, envsteps_this_batch = TODO
+            paths, envsteps_this_batch = sample_trajectories(env,actor, params['batch_size'], params['ep_len'])
 
             # relabel the collected obs with actions from a provided expert policy
             if params['do_dagger']:
@@ -157,8 +157,9 @@ def run_training_loop(params):
           # HINT2: use np.random.permutation to sample random indices
           # HINT3: return corresponding data points from each array (i.e., not different indices from each array)
           # for imitation learning, we only need observations and actions.  
-          ob_batch, ac_batch = TODO
 
+          ob_batch, ac_batch =  ob,expert_policy.get_action(ob)
+          ob, _, _, _ = env.step(ac_batch.reshape(-1))          
           # use the sampled data to train an agent
           train_log = actor.update(ob_batch, ac_batch)
           training_logs.append(train_log)

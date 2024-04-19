@@ -157,7 +157,8 @@ def run_training_loop(params):
           # HINT2: use np.random.permutation to sample random indices
           # HINT3: return corresponding data points from each array (i.e., not different indices from each array)
           # for imitation learning, we only need observations and actions.  
-          ob_batch, ac_batch =  env.observation_space,env.action_space
+          ob = env.observation_space
+          ob_batch, ac_batch =  ob,expert_policy.action(ob)
 
           # use the sampled data to train an agent
           train_log = actor.update(ob_batch, ac_batch)

@@ -59,8 +59,10 @@ class MLPPolicy(nn.Module):
     def get_action(self, obs: np.ndarray) -> np.ndarray:
         """Takes a single observation (as a numpy array) and returns a single action (as a numpy array)."""
         # TODO: implement get_action
-        action = None
-
+        obs = torch.FloatTensor(obs).to(ptu.device)
+        action = self.forward(obs)
+        action = action.cpu().numpy()
+        action = 0 if action[0] > action[1] else 1
         return action
 
     def forward(self, obs: torch.FloatTensor):
@@ -70,16 +72,15 @@ class MLPPolicy(nn.Module):
         flexible objects, such as a `torch.distributions.Distribution` object. It's up to you!
         """
         if self.discrete:
-            # TODO: define the forward pass for a policy with a discrete action space.
-            pass
+            output=self.logits_net(obs)
         else:
-            # TODO: define the forward pass for a policy with a continuous action space.
-            pass
-        return None
+            output=self.mean_net(obs)
+        return output
 
     def update(self, obs: np.ndarray, actions: np.ndarray, *args, **kwargs) -> dict:
         """Performs one iteration of gradient descent on the provided batch of data."""
-        raise NotImplementedError
+        
+        
 
 
 class MLPPolicyPG(MLPPolicy):
@@ -95,6 +96,7 @@ class MLPPolicyPG(MLPPolicy):
         obs = ptu.from_numpy(obs)
         actions = ptu.from_numpy(actions)
         advantages = ptu.from_numpy(advantages)
+
 
         # TODO: implement the policy gradient actor update.
         loss = None
