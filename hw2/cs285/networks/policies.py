@@ -95,16 +95,17 @@ class MLPPolicyPG(MLPPolicy):
         obs: np.ndarray,
         actions: np.ndarray,
         advantages: np.ndarray,
+        N
     ) -> dict:
         """Implements the policy gradient actor update."""
         obs = ptu.from_numpy(obs)
         actions = ptu.from_numpy(actions)
         advantages = ptu.from_numpy(advantages)
-
+        N
         action_dist=self.forward(obs)
         log_p = action_dist.log_prob(actions)
         self.optimizer.zero_grad()
-        loss = -torch.mean(log_p*advantages)
+        loss = -(torch.sum(log_p*advantages))/N
         loss.backward()
         self.optimizer.step()
 
