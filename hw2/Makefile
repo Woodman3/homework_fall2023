@@ -1,5 +1,5 @@
 all: run_hw2.py 
-	python run_hw2.py --env_name CartPole-v0 -n 300 -b 4000 --exp_name cartpole_lb
+	python run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 --exp_name cartpole --discount 0.99
 
 t1: run_hw2.py
 	python run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 --exp_name cartpole
@@ -24,3 +24,13 @@ t7: run_hw2.py
 
 t8: run_hw2.py
 	python run_hw2.py --env_name CartPole-v0 -n 100 -b 4000 --exp_name cartpole_lb_rtg_na -rtg -na
+
+t9: run_hw2.py
+	python run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 -l 4 --exp_name cartpole
+
+t10: run_hw2.py
+	python run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 -s 128 --exp_name cartpole
+
+t11: run_hw2.py
+	python run_hw2.py --env_name CartPole-v0 -n 100 -b 4000 -l 4 --exp_name cartpole
+

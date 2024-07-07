@@ -101,7 +101,6 @@ class MLPPolicyPG(MLPPolicy):
         obs = ptu.from_numpy(obs)
         actions = ptu.from_numpy(actions)
         advantages = ptu.from_numpy(advantages)
-        N
         action_dist=self.forward(obs)
         log_p = action_dist.log_prob(actions)
         self.optimizer.zero_grad()

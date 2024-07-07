@@ -73,13 +73,14 @@ class PGAgent(nn.Module):
         advantages: np.ndarray = self._estimate_advantage(
             obs, rewards, q_values, terminals
         )
-
         N = len(obs)
         obs = np.concatenate(obs)
         actions = np.concatenate(actions)
         rewards = np.concatenate(rewards)
         terminals = np.concatenate(terminals)
         q_values = np.concatenate(q_values)
+        advantages = np.concatenate(advantages)
+
 
         # step 3: use all datapoints (s_t, a_t, adv_t) to update the PG actor/policy
         # TODO: update the PG actor/policy network once using the advantages
@@ -153,9 +154,9 @@ class PGAgent(nn.Module):
 
         # TODO: normalize the advantages to have a mean of zero and a standard deviation of one within the batch
         if self.normalize_advantages:
-            for advantage in advantages
+            for advantage in advantages:
                 b = np.zeros(len(advantage))
-                p = self.actor.forward(ptu.from_numpy(reward)).prob()
+                p = self.actor.forward(ptu.from_numpy(obs)).prob()
                 b[-1] = p[-1]*reward[-1]
                 for i in range(len(b)-2,-1,-1):
                     b[i] = p[i]*reward[i]
